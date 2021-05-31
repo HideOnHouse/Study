@@ -231,7 +231,7 @@ int Queue_Dequeue(queue_t *q, int *value) {
 }
 ```
 - 병행 해시 테이블 (using concurrent linked list)
-```
+```C
 #define BUCKETS (101)
 typedef struct __hash_t {
     list_t lists[BUCKETS];
