@@ -12,6 +12,7 @@
 	  에게 알려준다. 이를 알려주는 것을 `control agent(CA)`라고 한다. cf) 테이블 자체를 여러개 있음
 		- pros 하나의 topology로 forwarding table을 작성하기 때문에, 상태 변화를 처리하기 용이하다.
 		- cons 전시에 불리하다.?
+- - - 
 - ### Routing Protocols
 	- 네트워크를 그래프로 추상화하여 최단 비용, 최대 속도, 최소 혼잡 경로를 찾는다.
 	- `global(link state algorithm)`, `decentralized(distance vector)` : static, dynamic으로 크게 구별 가능하다.
@@ -23,6 +24,7 @@
 	  각각의 node는 변경될 때문 dv를 다른 노드에 알려주기만 하면 된다. 뭔가 날아보면 dv 다시 계산하면 됨  
 	  얼마나 빨리 수렴할까 --> `good news travels fast`, `count-to-infinity problem`  
 	  부정확한 정보가 넓은 범위에 영향을 미침
+- - -
 - ### Making Routing Scalable
 	- 라우터들을 묶은 것을 `autonomous system(AS) a.k.a. domain`라고 한다.  
 	- intra-AS routing
@@ -34,7 +36,7 @@
 	  - RIP (Routing Information Protocol)
 	  - OSPF (Open Shortest Path First, IS-IS)
 	  - IGPR (Interior Gateway Routing Protocol, Cisco proprietary)
-	- OSPF (Intra AS Routing)
+	- OSPF (Internal AS Routing)
 	  - Link-State Algorithm
 	  - IP 바로 위에서 동작한다. (TCP/UDP에서 동작 안함;;)
 	  - OSPF는 암호가 틀리면 메세지를 받을 수 없다
@@ -62,7 +64,9 @@
 		- additional criteria
 	- Difference
 		- intra-AS는 policy 적용 안됨, 성능을 최우선으로 생각함.
+- - -
 - ### SDN Control Plane
+- - -
 - ### ICMP: Internet Control Message Protocol
   - error reporting (unreachable host, network, port, protocol)
   - IP 위에서 동작한다, type, code + IP datagram의 처음 8바이트(, packet ID) 를 사용한다.
