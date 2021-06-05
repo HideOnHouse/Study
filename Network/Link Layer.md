@@ -109,8 +109,55 @@ L2 Switch들로 구성된 망에서 경로는 설정하는 데에는 RIP나 OSPF
   일치하면 데이터그램을 추출한다. 랜상의 다른 모든 아댑터가 자신이 전손한 프레임을 수신하고 처리하기를 원하면 FF-FF-FF-FF-FF-FF의  
   MAC 브로드캐스트 주소를 넣는다.
 - #### ARP (Address Resolution Protocol, IP <-> MAC)
-  - 동영상 정리
+  - 같은 서브넷의 경우, ARP는 Host Name을 IP로 변환해주는 DNS와 어느정도 비슷하다고 볼 수 있다. 대신에 ARP는 동일한 서브넷상에 있는 호스트나 라우터  
+    인터페이스의 IP 주소만을 해결한다. 송신 노드의 ARP 테이블에 목적지 노드에 대한 엔트리가 없으면 `ARP 패킷`이라는 특수 패킷을 이용한다.
+  - 다른 서브넷의 경우, 
 ### Ethernet
-
-
-
+  - 1900년대 랜이 허브 기반의 스타 토폴리지를 사용하는 이더넷으로 점차 대체됬다. (허브는 프레임이 아닌 각각의 비트에 대한 처리를 하는 물리 계층이다)
+  - 2000년대 초반에 이더넷을 설치하는 데 있어서 여전히 스타 토폴로지를 사용하지만, 중앙의 허브가 `스위치`로 대체되었다.
+  - 스위치는 2계층까지만 동작한다.
+  - structure
+    - [preamble, 8][dst, 6][src, 6][type, 2][data, 46-1500][CRC, 4]
+  - CRC검사에서 실패하여 폐기된 이더넷 프레임의 여부는 TCP, UDP에 달려 있다.
+### Link Layer Switch
+Switch는 기본적으로 `Transparent`하다.
+- filtering, forwarding
+  `switch table`을 통해 이루어진다.
+  - 엔트리가 없을 경우 도착한 인터페이스 이외의 모든 인터페이스에 프레임을 브로드캐스트한다.
+  - 도착한 인터페이스에 관한 엔트리가 있을 경우, 프레임은 송신 어댑터를 포함하는 랜 세그먼트로부터 왔으므로 여과한다.
+  - 전달할 인터페이스에 관한 엔트리가 있을 경우, 프레임은 인터페이스 y에 접속된 랜 세그먼트로 전달되어야 한다.
+- self-learning
+- pros (스타 토폴로지 대신 스위치를 사용함에 있어서의 장점)
+  - 충돌 제거: 충돌로 인해 낭비되는 대역폭이 없다
+  - 이질적인 링크 (HETEROGENEOUS): 스위치는 모든 링크들을 별개로 분리한다
+  - 관리: 스위치는 오작동한 어댑터와의 연결을 의도적으로 끊는다 또한, 통계치를 자동으로 수집한다.
+### Switch VS Router
+```
+[Application]: Network S/W, `Message, Data`
+[Presentation]: Packing, Decode, Encode, Encrpyt, Decrypt
+[Session]: Duplex, Half-Duplex, Full-Duplex (TCP/IP Session)
+[Transport]: TCP, UDP, `Segment`
+[Network]: Router, L3 Switch, IP, ARP, RIP, OSPF, BGP, `Packet`
+[Data Link]: L2 Switch, HDLC, ALOHA, CSMA/CD, `frame`
+[Physical]: Hub, SCSI, `bit`
+```
+  - 라우터는 L3 패킷 스위치이지만, 스위치는 L2 패킷 스위치이다.
+  - Switch
+    - pros
+      - plug and play
+      - 상대적으로 높은 패킷 여과 및 전달률
+    - cons
+      - 스패닝 트리 토폴로지로 제한됨
+      - 커다란 ARP Table
+      - 브로드캐스트 트래픽의 폭주에 대한 대비를 제공하지 않음
+  - Router
+    - pros
+      - 출발지와 목적지 간의 최상의 경로를 사용할 수 있음
+      - 브로드캐스트 트랲기의 폭주에 대비한 방화벽 보호기능
+    - cons
+      - plug and play가 아님
+      - 3계층 필드까지 처리해야하므로 스위치보다 처리 시간이 더 크다
+### VLAN (Virtual Local Area Network)
+브로드캐스트 트래픽의 전달 범위를 제한시킴으로써 랜 선능을 향상시킬 수 있고, 또한 패킷스니퍼를 피할 수 있다.  
+스위치 또한 효율적으로 사용할 수 있고, 사용자를 관리하기 편리하다  
+`VLAN Trunking`을 통해 VLAN 스위치들을 연결할 수 있다.
