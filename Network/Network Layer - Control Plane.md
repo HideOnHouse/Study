@@ -1,12 +1,13 @@
 ## Network Layer Function
 
 - - -
+transport segment from sending to receiving `host + router`, transport, application layer과는 다르다  
 네트워크 레이어는 `forwarding(data plane)`, `routing(control plane)` 두 가지 기능을 제공한다.
 
 - ### control plane
 	- per-router control (traditional)  
 	  모든 라우터에 라우팅 알고리즘이 존재하고, 서로 메세지를 주고받는다. (topology)  
-	  상태 변화를 제대로 알려주지 못하면 `routing loop`같은 문제가 생길 수 있다.<br><br>
+	  상태 변화를 제대로 알려주지 못하면 `routing loop`같은 문제가 생길 수 있다  
 	- logically centralized control (software defined network)      
 	  논리적으로 하나의 컨트롤러라 존재하고, 하나의 컨트롤러가 모든 라우터의 요청을 처리한다. 라우터는 자신의 정보를 `remote controller`  
 	  에게 알려준다. 이를 알려주는 것을 `control agent(CA)`라고 한다. cf) 테이블 자체를 여러개 있음

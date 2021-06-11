@@ -19,6 +19,10 @@
 위와 똑같은 `interpolation`을 이용하여 depth 또한 계산할 수 있다.  
 먼저 그린 depth보다 depth보다 클 경우 그 값을 덮어씌우지 않고 거른다. (색상 등을)
 물체끼리의 depth 값이 일치할 경우 GL 설정을 통해 결정할 수 있다.
-!투명한 경우 계산하지 않고, `painter's algorithm`을 사용한다.  
+  - Combine shading and hidden surface removal through scan line algorithm
+ 
+투명한 경우 계산하지 않고, `painter's algorithm`을 사용한다. 이때, Z 값의 sorting이 필요하다.  
 
-      
+## Hidden Surface Removal (Back-Face Removal)
+- - -
+-90 < theta < 90의 범위를 벗어나는 물체는 면이 보일리가 없다. (normal과 이루는 값)
