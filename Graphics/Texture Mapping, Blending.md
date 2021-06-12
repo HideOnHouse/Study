@@ -19,22 +19,22 @@ A: Uses images to fill inside of polygons : Large chunks image data to paint the
 6. Rendering with texture coords
 
 ```C++
-glGenTextures()
-glBindTexture()
+glGenTextures();
+glBindTexture();
 
-glActiveTexture(GL_TEXTUREi)
-glTexParameter()
+glActiveTexture(GL_TEXTUREi);
+glTexParameter();
 
-glTexImage2D()
+glTexImage2D();
 	- GL_UNSIGNED_BYTE
 	- GL_UNSIGNED_SHORT_5_6_5
 	- GL_UNSIGNED_SHORT_4_4_4_4
 	- GL_UNSIGNED_SHORT_5_5_5_1
-glUniform1i(glGetUniformLocation(...), i)
+glUniform1i(glGetUniformLocation(...), i);
 
-glActivaTexture(GL_TEXTUREi)
-glBindTexture()
-glEnableVertexAttribArray(), glEnableVertexAttribPointer()
+glActivaTexture(GL_TEXTUREi);
+glBindTexture();
+glEnableVertexAttribArray(); glEnableVertexAttribPointer();
 ```
 
 ```C++
@@ -248,7 +248,7 @@ void glBlendEquationSeparate(GLenum modeRGB, GLenum modeAlpha);
 	
 ## Texture Blending
 - - -
-```GLSL
+```
 /// Multitexture Fragment Shader
 precision mediump float;
 varying vec2 v_texCoord;
