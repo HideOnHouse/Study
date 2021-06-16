@@ -237,7 +237,7 @@ SELECT STR_TO_DATE('11', '%h'); /* 11:00:00 */
 SELECT STR_TO_DATE('20130101 1130', '%Y%m%d %h%i'); /* 2013-01-01 11:30:00*/
 SELECT STR_TO_DATE('21,5,2013 extra characters', '%d,%m,%Y'); /* 2013-05-21 */
 ```
-###cast function
+### cast function
 ```
 CAST()
 CONVERT()
