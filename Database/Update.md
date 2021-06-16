@@ -1,4 +1,3 @@
-# *Insert*
 ## Data Update
 - - - 
 ### Insert
@@ -22,12 +21,12 @@ BACK_NO TINYINT
 INSERT INTO BLUE_DRAGON_TEAM1
 SELECT PLAYER_ID, PLAYER_NAME, BACK_NO
 FROM PLAYER
-WHERE TEAM_ID = ‘K07';
+WHERE TEAM_ID = 'K07';
 
 CREATE TABLE BLUE_DRAGON_TEAM2 [AS]
 SELECT PLAYER_ID, PLAYER_NAME, BACK_NO
 FROM PLAYER
-WHERE TEAM_ID = ‘K07';
+WHERE TEAM_ID = 'K07';
 ```
 ### Delete
 ```mysql
@@ -58,37 +57,4 @@ WHERE PLAYER_ID = '2000001';
 
 UPDATE PLAYER
 SET BACK_NO = 99
-```
-## QUERY
-- - -
-### Select
-실행 순서
-1. from 테이블에서 (join)
-2. where 이런 튜플들을 (select)
-3. group by 묶고
-4. having 이거 가지고 있는걸
-5. select 찾는대 (project)
-6. order by 순서대로
-
-```mysql
-SELECT [ALL|DISTINCT] { {컬럼명 [[AS] 컬럼_별명], }⁺ | * }
-FROM 테이블_리스트
-[ WHERE 투플_조건식 ]
-[ GROUP BY 컬럼명 [HAVING 그룹_조건식] ]
-[ ORDER BY {컬럼명|컬럼_별명|컬럼_위치 [ASC|DESC],}⁺ ];
-# 조건식 := 컬럼명 비교연산자|SQL연산자 {숫자|문자|표현식}|컬럼명
-
-# example
-SELECT PLAYER_ID, PLAYER_NAME, BACK_NO
-FROM PLAYER
-WHERE TEAM_ID = ‘K07';
-
-
-SELECT DISTINCT POSITION # DISTINCT : 중복 제거
-FROM PLAYER;
-
-SELECT *
-FROM PLAYER; 
-
-
 ```
