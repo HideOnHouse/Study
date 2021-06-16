@@ -1,0 +1,386 @@
+# *Relational Algebra*
+## Set Operator - UNION
+- - -
+
+```mysql
+SELECT [ALL|DISTINCT] {{컬럼명 [[AS] 컬럼_별명],}⁺ | * }
+FROM 테이블_리스트
+[ WHERE 투플_조건식 ]
+[ GROUP BY 컬럼명 [HAVING 그룹_조건식] ]
+{UNION [DISTINCT|ALL]} | INTERSECT | EXCEPT
+SELECT [ALL|DISTINCT] {{컬럼명 [[AS] 컬럼_별명],}⁺ | * }
+FROM 테이블_리스트
+[ WHERE 투플_조건식 ]
+[ GROUP BY 컬럼명 [HAVING 그룹_조건식] ]
+[ ORDER BY {컬럼명|컬럼_별명|컬럼_위치 [ASC|DESC],}⁺ ];
+```
+```mysql
+SELECT TEAM_ID 팀코드, PLAYER_NAME 선수명, POSITION 포지션,
+BACK_NO 백넘버, HEIGHT 키
+FROM PLAYER
+WHERE TEAM_ID = 'K02'
+UNION
+SELECT TEAM_ID 팀코드, PLAYER_NAME 선수명, POSITION 포지션,
+BACK_NO 백넘버, HEIGHT 키
+FROM PLAYER
+WHERE TEAM_ID = 'K07'
+ORDER BY 선수명;
+
+# 같은 결과
+SELECT TEAM_ID 팀코드, PLAYER_NAME 선수명, POSITION 포지션,
+BACK_NO 백넘버, HEIGHT 키
+FROM PLAYER
+WHERE TEAM_ID IN ('K02','K07')
+ORDER BY 선수명;
+
+
+SELECT TEAM_ID 팀코드, PLAYER_NAME 선수명, POSITION 포지션,
+BACK_NO 백넘버, HEIGHT 키
+FROM PLAYER
+WHERE TEAM_ID = 'K01'
+UNION ALL
+SELECT TEAM_ID 팀코드, PLAYER_NAME 선수명, POSITION 포지션,
+BACK_NO 백넘버, HEIGHT 키
+FROM PLAYER
+WHERE POSITION = 'GK'
+ORDER BY 팀코드, 선수명;
+
+SELECT TEAM_ID 팀코드, PLAYER_NAME 선수명, POSITION 포지션,
+BACK_NO 백넘버, HEIGHT 키
+FROM PLAYER
+WHERE TEAM_ID = 'K01'
+UNION [DISTINCT]
+SELECT TEAM_ID 팀코드, PLAYER_NAME 선수명, POSITION 포지션,
+BACK_NO 백넘버, HEIGHT 키
+FROM PLAYER
+WHERE POSITION = 'GK'
+ORDER BY 팀코드, 선수명;
+```
+## Join
+- - -
+조인할 두 테이블에 공통의 조인 속성 (joining attribute)이 있어야 함  
+일반적인 경우, 테이블들은 PRIMARY KEY(PK)와 FOREIGN KEY(FK) 값의 연관에 의해 조인이 성립됨
+```mysql
+#example
+SELECT PLAYER.PLAYER_NAME 선수명, TEAM.TEAM_NAME 소속팀명 # project
+FROM PLAYER, TEAM
+WHERE PLAYER.TEAM_ID = TEAM.TEAM_ID; # join, select
+
+SELECT PLAYER.PLAYER_NAME 선수명, TEAM.TEAM_NAME 소속팀명
+FROM PLAYER JOIN TEAM ON PLAYER.TEAM_ID = TEAM.TEAM_ID;
+```
+### WHERE Join
+```mysql
+SELECT PLAYER.PLAYER_NAME, PLAYER.BACK_NO, PLAYER.TEAM_ID,
+TEAM.TEAM_NAME, TEAM.REGION_NAME
+FROM PLAYER, TEAM
+WHERE PLAYER.TEAM_ID = TEAM.TEAM_ID; # 조인 조건
+
+SELECT PLAYER.PLAYER_NAME, PLAYER.BACK_NO, PLAYER.TEAM_ID,
+TEAM.TEAM_NAME, TEAM.REGION_NAME
+FROM PLAYER JOIN TEAM ON PLAYER.TEAM_ID = TEAM.TEAM_ID; # 조인 조건
+
+
+# FROM 절에서 테이블 별명을 선언한 경우 SELECT, WHERE에서도 반드시 테이블 별명을 사용해야 한다
+SELECT P.PLAYER_NAME 선수명, P.BACK_NO 백넘버, P.TEAM_ID 팀코드,
+T.TEAM_NAME 소속팀, T.REGION_NAME 연고지
+FROM PLAYER P, TEAM T
+WHERE P.TEAM_ID = T.TEAM_ID;
+
+SELECT P.PLAYER_NAME 선수명, P.BACK_NO 백넘버, P.TEAM_ID 팀코드,
+T.TEAM_NAME 소속팀, T.REGION_NAME 연고지
+FROM PLAYER P JOIN TEAM T ON P.TEAM_ID = T.TEAM_ID;
+
+SELECT P.PLAYER_NAME 선수명, P.BACK_NO 백넘버, P.TEAM_ID 팀코드,
+T.TEAM_NAME 소속팀, T.REGION_NAME 연고지
+FROM PLAYER P, TEAM T
+WHERE P.TEAM_ID = T.TEAM_ID AND P.POSITION = 'GK'
+ORDER BY P.BACK_NO; # 조인 조건
+
+SELECT P.PLAYER_NAME 선수명, P.BACK_NO 백넘버, P.TEAM_ID 팀코드,
+T.TEAM_NAME 소속팀, T.REGION_NAME 연고지
+FROM PLAYER P JOIN TEAM T ON P.TEAM_ID = T.TEAM_ID # 조인 조건
+WHERE P.POSITION = 'GK' # 검색 조건
+ORDER BY P.BACK_NO; 
+
+SELECT P.PLAYER_NAME 선수명, P.POSITION 포지션,
+T.TEAM_NAME 소속팀, T.REGION_NAME 연고지,
+S.STADIUM_NAME 전용구장, S.SEAT_COUNT 좌석수
+FROM PLAYER P, TEAM T, STADIUM S
+WHERE P.TEAM_ID = T.TEAM_ID AND T.STADIUM_ID = S.STADIUM_ID
+ORDER BY 선수명;
+
+SELECT P.PLAYER_NAME 선수명, P.POSITION 포지션,
+T.TEAM_NAME 소속팀, T.REGION_NAME 연고지,
+S.STADIUM_NAME 전용구장, S.SEAT_COUNT 좌석수
+FROM PLAYER P JOIN TEAM T ON P.TEAM_ID = T.TEAM_ID
+JOIN STADIUM S ON T.STADIUM_ID = S.STADIUM_ID
+ORDER BY 선수명;
+
+
+# 같은 질의
+SELECT P.PLAYER_NAME 선수명, P.POSITION 포지션,
+T.TEAM_NAME 소속팀, T.REGION_NAME 연고지,
+S.STADIUM_NAME 전용구장, S.SEAT_COUNT 좌석수
+FROM PLAYER P JOIN TEAM T ON P.TEAM_ID = T.TEAM_ID
+JOIN STADIUM S ON T.STADIUM_ID = S.STADIUM_ID
+ORDER BY 선수명;
+
+SELECT P.PLAYER_NAME 선수명, P.POSITION 포지션,
+T.TEAM_NAME 소속팀, T.REGION_NAME 연고지,
+S.STADIUM_NAME 전용구장, S.SEAT_COUNT 좌석수
+FROM TEAM T JOIN STADIUM S ON T.STADIUM_ID = S.STADIUM_ID
+JOIN PLAYER P ON P.TEAM_ID = T.TEAM_ID
+ORDER BY 선수명;
+
+
+### Non Equi-Join
+SELECT CONCAT(E.FNAME, ' ', E.MINIT, '. ', E.LNAME) AS 'FULL NAME',
+E.SALARY, S.GRADE
+FROM EMPLOYEE E, SALARY_GRADE G
+WHERE E.SALARY BETWEEN G.LOW AND G.HIGH;
+```
+
+### FROM 절 JOIN
+
+```mysql
+# inner ON join
+SELECT t1.c1, t2.c2, …
+FROM t1 [ [INNER] JOIN t2 ON t1.c1 = t2.c2 ]⁺
+WHERE 검색조건 ;
+
+# inner USING Join
+SELECT t1.c1, t2.c2, …
+FROM t1 [ [INNER] JOIN t2 USING (컬럼명_리스트) ]⁺
+WHERE 검색조건 ;
+
+# NATURE JOIN
+SELECT t1.c1, t2.c2, …
+FROM t1 [ NATURAL JOIN t2 ]⁺ // 주의: 조인 조건을 사용 안함.
+WHERE 검색조건 ; 
+
+# LEFT/RIGHT/FULL (OUTER) JOIN
+SELECT t1.c1, t2.c2, …
+FROM t1 [ LEFT|RIGHT|FULL [OUTER] JOIN t2 ON t1.c1 = t2.c2 ]⁺
+WHERE 검색조건
+
+SELECT t1.c1, t2.c2, …
+FROM t1 [ LEFT|RIGHT|FULL [OUTER] JOIN t2 USING (컬럼명_리스트) ]⁺
+WHERE 검색조건 ;
+
+# CROSS JOIN
+SELECT t1.c1, t2.c2, …
+FROM t1 [ CROSS JOIN t2 ]⁺ # 주의: 조인 조건을 사용 안함.
+WHERE 검색조건 ;
+```
+- INNER JOIN  
+  - ON JOIN  
+	두 테이블의 조인 속성 이름이 같거나 다를 때 사용  
+  	테이블명과 같은 접두사(식별자)를 사용하여 SELECT에 사용되는 칼럼의 소속을 논리적으로 명확하게 지정해야 한다
+  - USING JOIN  
+	같은 이름을 가진 칼럼들, 식별자를 사용하면 에러가 발생
+```mysql
+# GK 포지션의 선수마다 팀 연고지명, 팀명, 구장명을 출력
+SELECT PLAYER_NAME 선수명, POSITION 포지션, REGION_NAME
+연고지명, TEAM_NAME 팀명, STADIUM_NAME 구장명
+FROM PLAYER JOIN TEAM ON PLAYER.TEAM_ID = TEAM.TEAM_ID
+JOIN STADIUM ON TEAM.STADIUM_ID = STADIUM.STADIUM_ID
+WHERE POSITION = 'GK'
+ORDER BY 선수명;
+
+SELECT PLAYER_NAME 선수명, POSITION 포지션, REGION_NAME
+연고지명, TEAM_NAME 팀명, STADIUM_NAME 구장명
+FROM PLAYER JOIN TEAM USING (TEAM_ID)
+JOIN STADIUM USING (STADIUM_ID)
+WHERE POSITION = 'GK'
+ORDER BY 선수명;
+
+
+
+# 홈팀이 3점 이상 차이로 승리한 경기의 경기장 이름, 경기 일정, 홈팀 이름과 원정팀 이름 정보를 출력
+SELECT STADIUM_NAME AS 경기장명, SCHE_DATE AS 경기일정,
+HT.TEAM_NAME AS 홈팀명, AT.TEAM_NAME AS 원정팀명,
+HOME_SCORE AS '홈팀 점수', AWAY_SCORE AS '원정팀 점수'
+FROM SCHEDULE SC JOIN STADIUM ST ON SC.STADIUM_ID = ST.STADIUM_ID
+JOIN TEAM HT ON SC.HOMETEAM_ID = HT.TEAM_ID
+JOIN TEAM AT ON SC.AWAYTEAM_ID = AT.TEAM_ID
+WHERE HOME_SCORE > = AWAY_SCORE + 3;
+```
+- NATURE JOIN
+  - 두 테이블 간의 동일한 이름을 갖는 모든 컬럼에 대해 EQUI-JOIN을 수행
+  - 조인 컬럼은 맨 앞에 한 번만 나옴
+```mysql
+SELECT *
+FROM PLAYER NATURAL JOIN TEAM;
+
+# 같은 질의
+SELECT *
+FROM PLAYER INNER JOIN TEAM USING (TEAM_ID);
+
+SELECT *
+FROM PLAYER INNER JOIN TEAM ON PLAYER.TEAM_ID = TEAM.TEAM_ID;
+
+# 선수, 팀, 경기 테이블을 모두 조인
+SELECT PLAYER_ID, PLAYER_NAME, POSITION, BACK_NO,
+TEAM_NAME, STADIUM_NAME
+FROM PLAYER NATURAL JOIN TEAM
+INNER JOIN STADIUM USING (STADIUM_ID);
+```
+- OUTER JOIN
+  - LEFT OUTER JOIN  
+	A 테이블이 driving table이 된다
+  - RIGHT OUTER JOIN
+	반대
+  - FULL OUTER JOIN
+```mysql
+SELECT TEAM_ID, TEAM_NAME, REGION_NAME, TEAM.STADIUM_ID,
+STADIUM_NAME, SEAT_COUNT
+FROM TEAM LEFT JOIN STADIUM USING (STADIUM_ID)
+UNION
+SELECT TEAM_ID, TEAM_NAME, REGION_NAME, TEAM.STADIUM_ID,
+STADIUM_NAME, SEAT_COUNT
+FROM TEAM RIGHT JOIN STADIUM USING (STADIUM_ID)
+ORDER BY TEAM_ID;
+```
+- CROSS JOIN
+```mysql
+SELECT TEAM_ID, TEAM_NAME, TEAM.STADIUM_ID, STADIUM_NAME
+FROM TEAM CROSS JOIN STADIUM
+ORDER BY TEAM_ID; /* 300개 투플 */
+
+# MySQL에서 FROM 절의 임시 테이블에는 반드시 테이블 alias를 선언해야 함
+SELECT COUNT(*)
+FROM (
+SELECT TEAM_ID, TEAM_NAME, TEAM.STADIUM_ID, STADIUM_NAME
+FROM TEAM CROSS JOIN STADIUM
+ORDER BY TEAM_ID
+) AS TEMP; /* 300개 투플 */
+```
+## SELF JOIN
+```mysql
+# 직원과 직원의 상급자에 대해, 각각 주민번호와 이름을 출력하시오.
+SELECT emp.Ssn,
+CONCAT(emp.Fname, ', ', emp.Minit, '. ', emp.Lname) AS Employee,
+mgr.Ssn,
+CONCAT(mgr.Fname, ', ', mgr.Minit, '. ', mgr.Lname) AS Manager
+FROM employee emp JOIN employee mgr ON emp.Super_ssn=mgr.ssn;
+
+# 사원, 사원의 상위 관리자의 이름을 검색하라.
+SELECT CONCAT(emp.Fname, ', ', emp.Minit, '. ', emp.Lname) AS Employee,
+CONCAT(mgr.Fname, ', ', mgr.Minit, '. ', mgr.Lname) AS Manager
+FROM employee emp JOIN employee mgr ON emp.Super_ssn=mgr.ssn;
+
+# 사원, 사원의 상위 관리자의 이름을 검색하라. 단, 상위 관리자가 없는 사원도 출력하라.
+SELECT CONCAT(emp.Fname, ', ', emp.Minit, '. ', emp.Lname) AS Employee,
+CONCAT(mgr.Fname, ', ', mgr.Minit, '. ', mgr.Lname) AS Manager
+FROM employee emp LEFT JOIN employee mgr ON emp.Super_ssn=mgr.ssn;
+
+# 사원, 사원의 상위 관리자 및 차상위 관리자의 이름을 검색하라. 단, 상위 관리자 혹은 차상위 관리자가 없는 사원도 
+출력하라.
+SELECT CONCAT(emp.Fname, ', ', emp.Minit, '. ', emp.Lname) AS Employee,
+CONCAT(mgr.Fname, ', ', mgr.Minit, '. ', mgr.Lname) AS Manager
+CONCAT(mgrOfMgr.Fname, ', ', mgrOfMgr.Minit, '. ', mgrOfMgr.Lname)
+AS ManagerOfManager
+FROM employee emp LEFT JOIN employee mgr ON emp.Super_ssn=mgr.ssn
+LEFT JOIN employee mgrOfMgr ON mgr.Super_ssn = mgrOfMgr.ssn;
+```
+## WITH JOIN(CTE)
+```mysql
+WITH [RECURSIVE] cte_name [(column_list)] AS (subquery),
+cte_name [(column_list)] AS (subquery),
+. . . .
+```
+```mysql
+WITH TEMP AS (
+SELECT TEAM_NAME, STADIUM_ID, STADIUM_NAME
+FROM TEAM JOIN STADIUM USING (STADIUM_ID)
+)
+SELECT TEAM_NAME, STADIUM.NAME
+FROM TEMP;
+
+# SCHEDULE 테이블에서 STADIUM_ID, HOMETEAM_ID, AWAYTEAM_ID를 각각 경기장명, 홈팀명, 어웨이팀명으로 출력하시오
+WITH TEMP1_SCHEDULE AS /* 홈팀명을 갖는 SCHEDULE */
+(
+SELECT S.STADIUM_ID, SCHE_DATE,
+TEAM_NAME AS HOMETEAM_NAME, AWAYTEAM_ID,
+HOME_SCORE, AWAY_SCORE
+FROM SCHEDULE S JOIN TEAM T ON S.HOMETEAM_ID = T.TEAM_ID
+),
+TEMP2_SCHEDULE AS /* 홈팀명, 어웨이팀명을 갖는 SCHEDULE */
+(
+SELECT T1.STADIUM_ID, SCHE_DATE,
+HOMETEAM_NAME, TEAM_NAME AS AWAYTEAM_NAME,
+HOME_SCORE, AWAY_SCORE
+FROM TEMP1_SCHEDULE T1 JOIN TEAM T ON T1.AWAYTEAM_ID = T.TEAM_ID
+)
+SELECT STADIUM_NAME 경기장명, SCHE_DATE,
+HOMETEAM_NAME 홈팀명, AWAYTEAM_NAME 어웨이팀명,
+HOME_SCORE, AWAY_SCORE
+FROM TEMP2_SCHEDULE T2 JOIN STADIUM S ON T2.STADIUM_ID = S.STADIUM_ID;
+
+# RECURSIVE CTE
+WITH RECURSIVE cte_name [(column_list)] AS
+(
+SELECT … // non-recursive SELECT: return initial row set
+UNION ALL
+SELECT … // recursive SELECT: return additional row sets
+)
+SELECT …;
+
+WITH RECURSIVE cte AS
+(
+SELECT 1 AS n, 'abc' AS str
+UNION ALL
+SELECT n + 1, CONCAT(str, str) FROM cte WHERE n < 4
+)
+SELECT *
+FROM cte; # 에러: str의 데이터 타입은 CHAR(3)
+
+WITH RECURSIVE cte AS
+(
+SELECT 1 AS n, CAST('abc' AS CHAR(30)) AS str
+UNION ALL
+SELECT n + 1, CONCAT(str, str) FROM cte WHERE n < 4
+)
+SELECT *
+FROM cte;
+
+# 피보나치
+WITH RECURSIVE fibonacci (n, fib_n, next_fib_n) AS
+(
+SELECT 1, 0, 1
+UNION ALL
+SELECT n + 1, next_fib_n, fib_n + next_fib_n
+FROM fibonacci
+WHERE n < 10
+)
+SELECT *
+FROM fibonacci;
+
+# 날짜
+WITH RECURSIVE DATES (DATE) AS
+(
+SELECT CAST(MIN(SCHE_DATE) AS DATE) FROM SCHEDULE
+UNION ALL
+SELECT DATE + INTERVAL 1 DAY
+FROM DATES
+WHERE DATE + INTERVAL 1 DAY <= '2012-03-31'
+)
+SELECT DATES.DATE, COALESCE(COUNT(SCHE_DATE),0) AS NO_OF_GAMES
+FROM DATES LEFT JOIN SCHEDULE ON DATES.DATE = SCHEDULE.SCHE_DATE
+GROUP BY DATES.DATE
+ORDER BY DATES.DATE;
+
+# Hierarchical Query
+WITH RECURSIVE employee_anchor (Ssn, Fname, Minit, Lname, Level) AS
+(
+SELECT Ssn, Fname, Minit, Lname, 1
+FROM employee
+WHERE Super_ssn IS NULL
+UNION ALL
+SELECT e.Ssn, e.Fname, e.Minit, e.Lname, Level+1
+FROM employee_anchor ea JOIN employee e ON ea.Ssn = e.Super_ssn
+)
+SELECT *
+FROM employee_anchor; # ORDER BY가 없어도 레벨 순으로 출력됨
+```
