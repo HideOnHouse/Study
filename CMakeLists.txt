@@ -20,7 +20,7 @@ foreach(file_path ${c_list})
 endforeach()
 
 
-file(GLOB_RECURSE cpp_list "Algorithm/*.cpp")
+file(GLOB_RECURSE cpp_list "Algorithm/*.c*")
 
 foreach(file_path ${cpp_list})
     string( REPLACE ".cpp" "" new_name ${file_path} )
@@ -28,3 +28,10 @@ foreach(file_path ${cpp_list})
     add_executable( ${filename} ${file_path} )
 endforeach()
 
+file(GLOB_RECURSE cpp_list "Misc/*.c*")
+
+foreach(file_path ${cpp_list})
+    string( REPLACE ".c" "" new_name ${file_path} )
+    get_filename_component(filename ${new_name} NAME)
+    add_executable( ${filename} ${file_path} )
+endforeach()
