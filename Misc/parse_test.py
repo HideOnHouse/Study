@@ -18,7 +18,7 @@ def main():
         print(f'C      execution time: {c_time}')
         start = time.time()
         os.system(
-            r'python ..\Misc\string_parse.py < ..\cmake-build-debug\input.txt')
+            r'python .\string_parse.py < ..\cmake-build-debug\input.txt')
         end = time.time()
         p_time = end - start
         print(f'Python execution time: {p_time}')
