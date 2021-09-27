@@ -11,27 +11,40 @@ project(study)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 11)
 
-file(GLOB_RECURSE c_list "NLP/*.c")
+file(GLOB_RECURSE file_list "NLP/*.c")
 
-foreach(file_path ${c_list})
+foreach(file_path ${file_list})
     string( REPLACE ".c" "" new_name ${file_path} )
     get_filename_component(filename ${new_name} NAME)
     add_executable( ${filename} ${file_path} )
 endforeach()
 
 
-file(GLOB_RECURSE cpp_list "Algorithm/*.c*")
+file(GLOB_RECURSE file_list "Algorithm/*.c*")
 
-foreach(file_path ${cpp_list})
+foreach(file_path ${file_list})
     string( REPLACE ".cpp" "" new_name ${file_path} )
+    string( REPLACE ".c" "" new_name ${new_name} )
     get_filename_component(filename ${new_name} NAME)
     add_executable( ${filename} ${file_path} )
 endforeach()
 
 file(GLOB_RECURSE cpp_list "Misc/*.c*")
 
-foreach(file_path ${cpp_list})
-    string( REPLACE ".c" "" new_name ${file_path} )
+file(GLOB_RECURSE file_list "Misc/*.c*")
+
+foreach(file_path ${file_list})
+    string( REPLACE ".cpp" "" new_name ${file_path} )
+    string( REPLACE ".c" "" new_name ${new_name} )
+    get_filename_component(filename ${new_name} NAME)
+    add_executable( ${filename} ${file_path} )
+endforeach()
+
+file(GLOB_RECURSE file_list "DataStructure/*.c*")
+
+foreach(file_path ${file_list})
+    string( REPLACE ".cpp" "" new_name ${file_path} )
+    string( REPLACE ".c" "" new_name ${new_name} )
     get_filename_component(filename ${new_name} NAME)
     add_executable( ${filename} ${file_path} )
 endforeach()
