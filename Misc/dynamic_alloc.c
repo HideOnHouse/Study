@@ -47,7 +47,7 @@ void print_all(vector list) {
 }
 
 int main() {
-    vector array = {.size = 0, .capacity = 0};
+    vector array = {.data = malloc(sizeof(int) * 100000000), .size = 0, .capacity = 0};
     for (int i = 0; i < 100000000; ++i) {
         push(&array, i);
     }

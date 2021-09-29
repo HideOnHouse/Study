@@ -1,5 +1,6 @@
 #include "stdio.h"
 #include "stdlib.h"
+#include "time.h"
 
 typedef struct vector {
     int *data;
@@ -15,8 +16,7 @@ void push(vector *vector, int element) {
         int *new_arr;
         if (vector->capacity == 0) {
             new_arr = malloc(sizeof(int));
-            vector->capacity ++;
-            vector->size = 1;
+            vector->capacity++;
         } else {
             new_arr = malloc(sizeof(int) * vector->capacity * 2);
             for (int i = 0; i < vector->capacity; ++i) {
@@ -60,8 +60,11 @@ int main() {
     for (int i = 0; i < 10; ++i) {
         push(&v, i);
     }
+    print_all(&v);
     for (int i = 0; i < 5; ++i) {
         pop(&v);
     }
+    print_all(&v);
+    clear(&v);
     print_all(&v);
 }
