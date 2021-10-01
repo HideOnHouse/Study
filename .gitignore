@@ -13,3 +13,7 @@ gen
 *.pickle
 NLP/gtlee
 cmake-build-debug
+
+.ipynb_checkpoints
+temp.png
+.txt
