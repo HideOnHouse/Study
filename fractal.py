@@ -54,7 +54,7 @@ def get_fractal(x_range: tuple, density) -> dict:
 
 def main():
     result = get_fractal((-2.5, 1.3), 10000)
-    plt.figure(figsize=(32, 32), dpi=300)
+    plt.figure(figsize=(128, 128))
     cmap = plt.get_cmap('jet')
     for orbit in result['stable']:
         plt.scatter(*zip(*result['stable'][orbit]), color='black', s=0.1)
