@@ -4,9 +4,15 @@
 #include <chrono>
 #include <cmath>
 
-#define ARR_SIZE 1000
+#define ARR_SIZE 100000000
 
 namespace chrono = std::chrono;
+
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
 
 void print_all(const int *arr, size_t length) {
     if (length <= 100) {
@@ -83,6 +89,43 @@ void merge_sort(int *arr, int *ret, int left, int right) {
     }
 }
 
+void max_heapify(int *arr, int idx, int k) {
+    int left_child;
+    int right_child;
+    int largest;
+    while (true) {
+        left_child = idx * 2 + 1;
+        right_child = idx * 2 + 2;
+        if (left_child < k and arr[idx] < arr[left_child]) {
+            largest = left_child;
+        } else {
+            largest = idx;
+        }
+        if (right_child < k and arr[largest] < arr[right_child]) {
+            largest = right_child;
+        }
+        if (largest != idx) {
+            swap(&arr[idx], &arr[largest]);
+            idx = largest;
+        } else {
+            break;
+        }
+    }
+}
+
+void heap_sort(int *arr, int left, int right) {
+    int length = right - left + 1;
+    int k = length;
+    for (int idx = length / 2 - 1; idx >= 0; --idx) {
+        max_heapify(arr, idx, k);
+    }
+    for (int i = length - 1; i >= 1; --i) {
+        swap(&arr[0], &arr[i]);
+        --k;
+        max_heapify(arr, 0, k);
+    }
+}
+
 void merge_sort(int *arr, int left, int right) {
     int *ret = new int[right - left + 1];
     merge_sort(arr, ret, left, right);
@@ -139,60 +182,68 @@ void radix_sort(int *arr, int left, int right, int d) {
     delete[] temp;
 }
 
+void check_time(int *arr, int length, const std::string &s) {
+    std::cout << "========== " << s << " Sort ==========" << std::endl;
+    print_all(arr, length);
+    if (s == "bubble" and length <= 100000) {
+        std::shuffle(arr, arr + length, std::default_random_engine(5)); // NOLINT(cert-msc51-cpp)
+        auto start = chrono::high_resolution_clock::now();
+        bubble_sort(arr, 0, length - 1);
+        auto stop = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+        std::cout << "Execution Time : " << duration.count() << std::endl;
+    } else if (s == "insertion" and length <= 100000) {
+        std::shuffle(arr, arr + length, std::default_random_engine(5)); // NOLINT(cert-msc51-cpp)
+        auto start = chrono::high_resolution_clock::now();
+        insertion_sort(arr, 0, length - 1);
+        auto stop = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+        std::cout << "Execution Time : " << duration.count() << std::endl;
+    } else if (s == "merge") {
+        std::shuffle(arr, arr + length, std::default_random_engine(5)); // NOLINT(cert-msc51-cpp)
+        auto start = chrono::high_resolution_clock::now();
+        merge_sort(arr, 0, length - 1);
+        auto stop = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+        std::cout << "Execution Time : " << duration.count() << std::endl;
+    } else if (s == "heap") {
+        std::shuffle(arr, arr + length, std::default_random_engine(5)); // NOLINT(cert-msc51-cpp)
+        auto start = chrono::high_resolution_clock::now();
+        heap_sort(arr, 0, length - 1);
+        auto stop = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+        std::cout << "Execution Time : " << duration.count() << std::endl;
+    }
+    else if (s == "counting") {
+        std::shuffle(arr, arr + length, std::default_random_engine(5)); // NOLINT(cert-msc51-cpp)
+        auto start = chrono::high_resolution_clock::now();
+        counting_sort(arr, 0, length - 1, length - 1);
+        auto stop = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+        std::cout << "Execution Time : " << duration.count() << std::endl;
+    } else if (s == "radix") {
+        std::shuffle(arr, arr + length, std::default_random_engine(5)); // NOLINT(cert-msc51-cpp)
+        auto start = chrono::high_resolution_clock::now();
+        radix_sort(arr, 0, length - 1, static_cast<int>(log2(length) / 4));
+        auto stop = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+        std::cout << "Execution Time : " << duration.count() << std::endl;
+    }
+    print_all(arr, length);
+}
+
 int main() {
     int *arr = new int[ARR_SIZE];
+    int length = ARR_SIZE;
     for (int i = 0; i < ARR_SIZE; ++i) {
         arr[i] = i;
     }
-    int length = ARR_SIZE;
-    std::cout << "Bubble Sort" << std::endl;
-    std::shuffle(arr, arr + length, std::default_random_engine(5)); // NOLINT(cert-msc51-cpp)
-    print_all(arr, length);
-    auto start = chrono::high_resolution_clock::now();
-    bubble_sort(arr, 0, length - 1);
-    auto stop = chrono::high_resolution_clock::now();
-    auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
-    std::cout << "Execution Time : " << duration.count() << std::endl;
-    print_all(arr, length);
-
-    std::cout << "Insertion Sort" << std::endl;
-    std::shuffle(arr, arr + length, std::default_random_engine(5)); // NOLINT(cert-msc51-cpp)
-    print_all(arr, length);
-    start = chrono::high_resolution_clock::now();
-    insertion_sort(arr, 0, length - 1);
-    stop = chrono::high_resolution_clock::now();
-    duration = chrono::duration_cast<chrono::microseconds>(stop - start);
-    std::cout << "Execution Time : " << duration.count() << std::endl;
-    print_all(arr, length);
-
-    std::cout << "Merge Sort" << std::endl;
-    std::shuffle(arr, arr + length, std::default_random_engine(5)); // NOLINT(cert-msc51-cpp)
-    print_all(arr, length);
-    start = chrono::high_resolution_clock::now();
-    merge_sort(arr, 0, length - 1);
-    stop = chrono::high_resolution_clock::now();
-    duration = chrono::duration_cast<chrono::microseconds>(stop - start);
-    std::cout << "Execution Time : " << duration.count() << std::endl;
-    print_all(arr, length);
-
-    std::cout << "Counting Sort" << std::endl;
-    std::shuffle(arr, arr + length, std::default_random_engine(5)); // NOLINT(cert-msc51-cpp)
-    print_all(arr, length);
-    start = chrono::high_resolution_clock::now();
-    counting_sort(arr, 0, length - 1, ARR_SIZE);
-    stop = chrono::high_resolution_clock::now();
-    duration = chrono::duration_cast<chrono::microseconds>(stop - start);
-    std::cout << "Execution Time : " << duration.count() << std::endl;
-    print_all(arr, length);
-
-    std::cout << "Radix Sort" << std::endl;
-    std::shuffle(arr, arr + length, std::default_random_engine(5)); // NOLINT(cert-msc51-cpp)
-    print_all(arr, length);
-    start = chrono::high_resolution_clock::now();
-    radix_sort(arr, 0, length - 1, static_cast<int>(std::log2(ARR_SIZE)) / 4);
-    stop = chrono::high_resolution_clock::now();
-    duration = chrono::duration_cast<chrono::microseconds>(stop - start);
-    std::cout << "Execution Time : " << duration.count() << std::endl;
-    print_all(arr, length);
+    std::cout << "ARRAY SIZE - " << ARR_SIZE << std::endl;
+    check_time(arr, length, "bubble");
+    check_time(arr, length, "insertion");
+    check_time(arr, length, "merge");
+    check_time(arr, length, "heap");
+    check_time(arr, length, "counting");
+    check_time(arr, length, "radix");
     return 0;
 }
