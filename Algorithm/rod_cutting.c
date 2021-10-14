@@ -5,15 +5,17 @@
 int top_down_rod_cutting(int *price, int length) {
     if (length == 0) {
         return 0;
-    }
-    int q = INT_MIN;
-    for (int i = 1; i <= length; ++i) {
-        int temp = price[i - 1] + top_down_rod_cutting(price, length - i);
-        if (q < temp) {
-            q = temp;
+    } else {
+        int ret = INT_MIN;
+        int temp;
+        for (int i = 1; i <= length; ++i) {
+            temp = price[i - 1] + top_down_rod_cutting(price, length - i);
+            if (ret < temp) {
+                ret = temp;
+            }
         }
+        return ret;
     }
-    return q;
 }
 
 int rod_cutting_aux(const int *price, int length, int *r) {
@@ -25,8 +27,9 @@ int rod_cutting_aux(const int *price, int length, int *r) {
         ret = 0;
     } else {
         ret = INT_MIN;
+        int temp;
         for (int i = 1; i <= length; ++i) {
-            int temp = price[i - 1] + rod_cutting_aux(price, length - i, r);
+            temp = price[i - 1] + rod_cutting_aux(price, length - i, r);
             if (ret < temp) {
                 ret = temp;
             }
@@ -38,20 +41,21 @@ int rod_cutting_aux(const int *price, int length, int *r) {
 
 int memo_rod_cutting(const int *price, int length) {
     int r[length + 1];
-    for (int *i = r; i < r + length + 1; ++i) {
-        *i = INT_MIN;
+    for (int i = 0; i <= length; ++i) {
+        r[i] = INT_MIN;
     }
     return rod_cutting_aux(price, length, r);
 }
 
 int bottom_up_rod_cutting(const int *price, int length) {
     int r[length + 1];
-    r[0] = 0;
     int ret;
+    int temp;
+    r[0] = 0;
     for (int i = 1; i <= length; ++i) {
         ret = INT_MIN;
         for (int j = 1; j <= i; ++j) {
-            int temp = price[j - 1] + r[i - j];
+            temp = price[j - 1] + r[i - j];
             if (ret < temp) {
                 ret = temp;
             }
@@ -63,19 +67,20 @@ int bottom_up_rod_cutting(const int *price, int length) {
 
 int *extended_bottom_up_cut_rod(const int *price, int length) {
     int r[length + 1];
-    int *s = malloc(sizeof(int) * (length + 1));
-    int ret;
+    int *s = malloc(sizeof(int) * sizeof(length + 1));
+    int q;
+    int temp;
     r[0] = 0;
     for (int i = 1; i <= length; ++i) {
-        ret = INT_MIN;
+        q = INT_MIN;
         for (int j = 1; j <= i; ++j) {
-            int temp = price[j - 1] + r[i - j];
-            if (ret < temp) {
-                ret = temp;
+            temp = price[j - 1] + r[i - j];
+            if (q < temp) {
+                q = temp;
                 s[i] = j;
             }
         }
-        r[i] = ret;
+        r[i] = q;
     }
     return s;
 }
