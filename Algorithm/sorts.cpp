@@ -101,6 +101,12 @@ void merge_sort(int *arr, int *ret, int left, int right) {
     }
 }
 
+void merge_sort(int *arr, int left, int right) {
+    int *ret = new int[right - left + 1];
+    merge_sort(arr, ret, left, right);
+    delete[] ret;
+}
+
 void max_heapify(int *arr, int idx, int k) {
     int left_child;
     int right_child;
@@ -136,12 +142,6 @@ void heap_sort(int *arr, int left, int right) {
         --k;
         max_heapify(arr, 0, k);
     }
-}
-
-void merge_sort(int *arr, int left, int right) {
-    int *ret = new int[right - left + 1];
-    merge_sort(arr, ret, left, right);
-    delete[] ret;
 }
 
 int partition(int *arr, int left, int right) {
