@@ -217,7 +217,7 @@ void radix_sort(int *arr, int left, int right, int d) {
 
 void check_time(int *arr, int length, const std::string &s) {
     std::cout << "========== " << s << " Sort ==========" << std::endl;
-    if (s == "bubble" and length <= 100000) {
+    if (s == "bubble") {
         std::shuffle(arr, arr + length, std::default_random_engine(5)); // NOLINT(cert-msc51-cpp)
         print_all(arr, length);
         auto start = chrono::high_resolution_clock::now();
@@ -225,7 +225,7 @@ void check_time(int *arr, int length, const std::string &s) {
         auto stop = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
         std::cout << "Execution Time : " << duration.count() << std::endl;
-    } else if (s == "insertion" and length <= 100000) {
+    } else if (s == "insertion") {
         std::shuffle(arr, arr + length, std::default_random_engine(5)); // NOLINT(cert-msc51-cpp)
         print_all(arr, length);
         auto start = chrono::high_resolution_clock::now();
@@ -233,7 +233,7 @@ void check_time(int *arr, int length, const std::string &s) {
         auto stop = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
         std::cout << "Execution Time : " << duration.count() << std::endl;
-    } else if (s == "selection" and length <= 100000) {
+    } else if (s == "selection") {
         std::shuffle(arr, arr + length, std::default_random_engine(5)); // NOLINT(cert-msc51-cpp)
         print_all(arr, length);
         auto start = chrono::high_resolution_clock::now();
