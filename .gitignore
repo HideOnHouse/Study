@@ -15,5 +15,6 @@ NLP/gtlee
 cmake-build-debug
 cmake-build-release
 .ipynb_checkpoints
-temp.png
-.txt
+*.txt
+*.png
+*.dat
