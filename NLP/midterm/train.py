@@ -1,4 +1,6 @@
+import os.path
 import pickle
+import sys
 
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -7,8 +9,15 @@ from tqdm import tqdm
 from utils import *
 
 
-def main():
-    df_train = pd.read_csv('./ratings_train.txt', sep='\t')
+def main(args):
+    if len(args) == 2:
+        train_file_path = args[1]
+    elif len(args) == 1:
+        train_file_path = f"{os.curdir}{os.sep}ratings_train{os.extsep}txt"
+    else:
+        print("Invalid Argument")
+        return 1
+    df_train = pd.read_csv(train_file_path, sep='\t')
 
     # 유효하지 않은 행 삭제
     df_train = df_train.dropna(axis=0)
@@ -35,20 +44,20 @@ def main():
 
     # 문서벡터를 파일로 출력
     print("Writing Vector...")
-    with open("train.dat", 'w', encoding='utf-8') as f:
+    with open("test.dat", 'w', encoding='utf-8') as f:
         temp = []
         row = 0
         for i in tqdm(result):
             if i[0][0] == row:
                 temp.append(f'{i[0][1]}:{i[1]}')
             else:
-                f.write(f"{doc_label[row]} " + " ".join(temp) + '\n')
+                f.write(f"{1 if doc_label[row] == 0 else -1} " + " ".join(temp) + '\n')
                 row += 1
                 temp.clear()
         if len(temp) != 0:
-            f.write(" ".join(temp) + '\n')
-    print("Train vector saved at ./train.dat")
+            f.write(f"{1 if doc_label[row] == 0 else -1} " + " ".join(temp) + '\n')
+    print(f"Train vector saved at {os.curdir}{os.sep}{train_file_path.rsplit(os.extsep, maxsplit=1)[0]}{os.extsep}dat")
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)

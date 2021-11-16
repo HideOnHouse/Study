@@ -50,6 +50,7 @@ def main():
             graph[u] = {
                 v: weight
             }
+    pprint(graph)
     result = dijkstra(graph, 1)
     print(sum(1 for i in result.values() if i <= max_time))
 
