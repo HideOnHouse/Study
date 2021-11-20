@@ -12,6 +12,8 @@ gen
 *.csv
 *.pickle
 NLP/gtlee
+NLP/midterm
+NLP/final
 cmake-build-debug
 cmake-build-release
 .ipynb_checkpoints
