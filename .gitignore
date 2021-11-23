@@ -9,6 +9,7 @@ out
 gen
 
 # User Template
+temp.*
 *.csv
 *.pickle
 NLP/gtlee

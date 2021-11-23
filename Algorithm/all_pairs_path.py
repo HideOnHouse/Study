@@ -8,13 +8,13 @@ def print_result(predecessor_matrix, i, j):
         print(j, end=", ")
 
 
-def extend_shortest_path(l, w):
-    n = len(l)
+def extend_shortest_path(l_m, w):
+    n = len(l_m)
     l_prime = [[float('inf')] * n for _ in range(n)]
     for i in range(n):
         for j in range(n):
             for k in range(n):
-                l_prime[i][j] = min(l_prime[i][j], l[i][k] + w[k][j])
+                l_prime[i][j] = min(l_prime[i][j], l_m[i][k] + w[k][j])
     return l_prime
 
 
