@@ -1,7 +1,7 @@
 #include "stdio.h"
 #include "string.h"
 
-void constructDFA(const char *pattern, int n, int *fail) {
+void get_fail_function(const char *pattern, int n, int *output) {
     for (int i = 1, j = 0; i < pattern_len; ++i) {
         while (j > 0 && pattern[i] != pattern[j]) {
             j = output[j - 1];
