@@ -4,7 +4,6 @@ Abstract way of representing connectivity using nodes and edges
 - Undirected Graph
 # Tree
 A connected acyclic graph
-***
 ## Traversal of Tree
 ### BFS
 1. Init each vertex except source
@@ -40,7 +39,6 @@ A connected acyclic graph
   1. DFS graph first
   2. DFS graph order of decreasing via finish time with transpose of graph
   3. Each generated forest is SCC
-***
 ## Minimum Spanning Tree
   Connect all vertex with the smallest weight
 ### Kruskal's Algorithm
@@ -59,7 +57,6 @@ A connected acyclic graph
    1. extract_min head
    2. for each adjust vertex
       1. relax head, vertex
-***
 ## Single Source Shortest Path
 get all vertices shortest path from single source
 ### Bellman-Ford's Algorithm
@@ -73,11 +70,19 @@ get all vertices shortest path from single source
     1. extract_min head (just pop from queue if graph is fully connected)
     2. for each adjust vertex
         1. relax head, vertex
-***
 ## All pairs Shortest Path
 ### Single Source Short Path for each vertex
 ### Matrix Multiplication Method, Floyd-Warshall Algorithm
 ```python
+def extend_shortest_path(l_m, w):
+    n = len(l_m)
+    l_prime = [[float('inf')] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            for k in range(n):
+                l_prime[i][j] = min(l_prime[i][j], l_m[i][k] + w[k][j])
+    return l_prime
+
 def slow_all_pairs_shortest_paths(w):
     n = len(w)
     ret = dict()
