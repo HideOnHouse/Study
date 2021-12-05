@@ -4,11 +4,11 @@
 
 using namespace std;
 
-int solution(int N, const vector<vector<int> > &road, int K) {
+int solution(int N, vector<vector<int> > road, int K) {
     int answer = 0;
     // Start Build Bidirectional Graph
     unordered_map<int, unordered_map<int, int>> graph;
-    for (const auto &item: road) {
+    for (const auto &item : road) {
         int u = item[0];
         int v = item[1];
         int w = item[2];
@@ -60,11 +60,4 @@ int solution(int N, const vector<vector<int> > &road, int K) {
         }
     }
     return answer;
-}
-
-int main() {
-    solution(3, {{1, 2, 1},
-                 {2, 3, 1},
-                 {1, 3, 1}}, 3);
-    return 0;
 }
