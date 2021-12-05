@@ -125,3 +125,33 @@ def floyd_warshall_algorithm(w):
                     predecessor[k][i][j] = predecessor[k - 1][i][j]
     return distances[n], predecessor[n]
 ```
+## Max Flow
+### Ford-Fulkerson Method
+1. Initialize all flow to 0
+2. while augmenting path is exists in residual network --> find augment using BFS
+   1. augment flor f along p
+3. return flow
+### Matching
+find maximum count of edge that makes all vertices is connected of incident of connected vertex
+## String Matching
+### Naive Algorithm (Brute Force) --> How to avoid backup?
+### DFA(Deterministic Finite State Automata)
+1. Make DFA
+```c
+int pat_len = strlen(pattern);
+DFA[pattern[0]][0] = 1;
+for (int X = 0, j = 1; j < pat_len; ++j) {
+    // Duplicate State
+    for (int c = 0; c < R; ++c) {
+        DFA[c][j] = DFA[c][X];
+    }
+    // Update State
+    DFA[pattern[j]][j] = ++j;
+    X = DFA[pattern[j]][X];
+}
+```
+2. move to state of DFA `j = DFA[text[i][j]`
+3. match true if `j == length of pattern`  
+
+**_Make transition of accept state to find all pattern matching count_**
+### Fail Function
