@@ -23,8 +23,6 @@ foreach(file_path ${file_list})
     add_executable( ${filename} ${file_path} )
 endforeach()
 
-file(GLOB_RECURSE cpp_list "Misc/*.c*")
-
 file(GLOB_RECURSE file_list "Misc/*.c*")
 
 foreach(file_path ${file_list})
